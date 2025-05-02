@@ -1,5 +1,5 @@
 # default base image: xzhao9/gcp-a100-runner-dind:latest
-ARG BASE_IMAGE=xzhao9/gcp-a100-runner-dind:latest
+ARG BASE_IMAGE=docker.io/xzhao9/gcp-a100-runner-dind@sha256:dad740f8bab2b79520b78bac9a32d6ae7aea51d2f1519366f510a6f938f7b575
 FROM ${BASE_IMAGE}
 
 ENV CONDA_ENV=torchbench
