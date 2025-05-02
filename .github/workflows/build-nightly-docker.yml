@@ -11,7 +11,7 @@ on:
 env:
   WITH_PUSH: "true"
   CONDA_ENV: "torchbench"
-  DOCKER_IMAGE: "ghcr.io/pytorch/torchbench:latest"
+  DOCKER_IMAGE: "ghcr.io/buttercannfly/torchbench:latest"
   SETUP_SCRIPT: "/workspace/setup_instance.sh"
   HUGGING_FACE_HUB_TOKEN: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
 
