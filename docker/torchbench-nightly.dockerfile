@@ -23,6 +23,10 @@ RUN cd /workspace/benchmark && \
     . ${SETUP_SCRIPT} && \
     sudo python ./utils/cuda_utils.py --setup-cuda-softlink
 
+RUN cd /workspace/benchmark && \
+    . ${SETUP_SCRIPT} && \
+    python utils/cuda_utils.py --install-torch-deps 
+
 # Check the installed version of nightly if needed
 RUN cd /workspace/benchmark && \
     . ${SETUP_SCRIPT} && \
