@@ -1,6 +1,5 @@
 # default base image: xzhao9/gcp-a100-runner-dind:latest
-ARG BASE_IMAGE=xzhao9/gcp-a100-runner-dind:latest
-
+ARG BASE_IMAGE=nvidia/cuda:12.4.0-devel-ubuntu20.04
 FROM ${BASE_IMAGE}
 
 ENV CONDA_ENV=torchbench
