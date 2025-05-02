@@ -107,6 +107,9 @@ def install_pytorch_nightly(cuda_version: str, env, dryrun=False):
     install_torch_cmd = ["pip", "install", "--pre", "--no-cache-dir"]
     install_torch_cmd.extend(TORCHBENCH_TORCH_NIGHTLY_PACKAGES)
     install_torch_cmd.extend(["-i", pytorch_nightly_url])
+    install_torch_cmd.append(f"torch==2.7.0.dev20250226+{CUDA_VERSION_MAP[cuda_version]['pytorch_url']}")
+    install_torch_cmd.append(f"torchvision==0.22.0.dev20250226+{CUDA_VERSION_MAP[cuda_version]['pytorch_url']}")
+    install_torch_cmd.append(f"torchaudio==2.7.0.dev20250226+{CUDA_VERSION_MAP[cuda_version]['pytorch_url']}")
     if dryrun:
         print(f"Install pytorch nightly: {install_torch_cmd}")
     else:
