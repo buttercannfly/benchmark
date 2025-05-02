@@ -26,7 +26,7 @@ RUN cd /workspace/benchmark && \
 RUN cd /workspace/benchmark && \
     . ${SETUP_SCRIPT} && \
     python utils/cuda_utils.py --install-torch-deps && \
-    python utils/cuda_utils.py --install-torch-nightly
+    python utils/cuda_utils.py --install-torch-nightly --force-date 20250226
 
 # Check the installed version of nightly if needed
 RUN cd /workspace/benchmark && \
