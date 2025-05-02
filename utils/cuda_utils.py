@@ -113,6 +113,7 @@ def install_pytorch_nightly(cuda_version: str, env, dryrun=False):
     if dryrun:
         print(f"Install pytorch nightly: {install_torch_cmd}")
     else:
+        print(f"Install pytorch nightly: {install_torch_cmd}")
         subprocess.check_call(install_torch_cmd, env=env)
 
 
