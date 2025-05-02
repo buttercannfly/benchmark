@@ -26,11 +26,6 @@ RUN cd /workspace/benchmark && \
 RUN cd /workspace/benchmark && \
     . ${SETUP_SCRIPT} && \
     python utils/cuda_utils.py --install-torch-deps && \ 
-    pip install --pre --no-cache-dir \
-    torch==2.7.0.dev20250226 \
-    torchvision==0.22.0.dev20250226+cu124 \
-    torchaudio==2.7.0.dev20250226 \
-    -i https://download.pytorch.org/whl/nightly/cu124 && \ 
     python utils/cuda_utils.py --install-torch-nightly --force-date 20250226
 
 # Check the installed version of nightly if needed
