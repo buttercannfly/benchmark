@@ -24,10 +24,17 @@ RUN cd /workspace/benchmark && \
     sudo python ./utils/cuda_utils.py --setup-cuda-softlink
 
 # Install PyTorch nightly and verify the date is correct
-RUN cd /workspace/benchmark && \
-    . ${SETUP_SCRIPT} && \
-    python utils/cuda_utils.py --install-torch-deps && \
-    python utils/cuda_utils.py --install-torch-nightly
+# 进入工作目录
+WORKDIR /workspace/benchmark
+
+# 加载环境设置
+RUN . ${SETUP_SCRIPT}
+
+# 安装Torch依赖
+RUN python utils/cuda_utils.py --install-torch-deps
+
+# 安装Nightly版本的Torch
+RUN python utils/cuda_utils.py --install-torch-nightly
 
 # Check the installed version of nightly if needed
 RUN cd /workspace/benchmark && \
