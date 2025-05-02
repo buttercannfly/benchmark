@@ -17,7 +17,6 @@ env:
 
 jobs:
   build-push-docker:
-    if: ${{ github.repository_owner == 'pytorch' }}
     runs-on: [self-hosted, linux.4xlarge]
     environment: docker-s3-upload
     steps:
