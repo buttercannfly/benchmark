@@ -7,6 +7,22 @@ ENV SETUP_SCRIPT=/workspace/setup_instance.sh
 ARG TORCHBENCH_BRANCH=${TORCHBENCH_BRANCH:-main}
 ARG FORCE_DATE=${FORCE_DATE}
 
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    wget \
+    python3 \
+    python3-pip \
+    python3-dev \
+    build-essential \
+    cmake \
+    ca-certificates \
+    libjpeg-dev \
+    libpng-dev \
+    libtinfo5 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # Checkout Torchbench and submodules
 RUN git clone --recurse-submodules -b "${TORCHBENCH_BRANCH}" --single-branch \
     https://github.com/pytorch/benchmark /workspace/benchmark
