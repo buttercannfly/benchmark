@@ -39,7 +39,10 @@ RUN cd /workspace/benchmark && \
 # RUN cd /workspace/benchmark && \
 #     . ${SETUP_SCRIPT} && \
 #     python install.py --userbenchmark torchao
+ 
+RUN cat ${SETUP_SCRIPT}
 
 # Install Torchbench models
 RUN cd /workspace/benchmark && \
+    . ${SETUP_SCRIPT} && \
     python install.py
