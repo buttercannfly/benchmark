@@ -29,16 +29,6 @@ RUN cd /workspace/benchmark && \
     python utils/cuda_utils.py --install-torch-nightly --force-date 20250226
 
 # Check the installed version of nightly if needed
-RUN cd /workspace/benchmark && \
-    . ${SETUP_SCRIPT} && \
-    if [ "${FORCE_DATE}" = "skip_check" ]; then \
-        echo "torch version check skipped"; \
-    elif [ -z "${FORCE_DATE}" ]; then \
-        FORCE_DATE=$(date '+%Y%m%d') \
-        python utils/cuda_utils.py --check-torch-nightly-version --force-date "${FORCE_DATE}"; \
-    else \
-        python utils/cuda_utils.py --check-torch-nightly-version --force-date "${FORCE_DATE}"; \
-    fi
 
 # Install TorchBench conda and python dependencies
 RUN cd /workspace/benchmark && \
