@@ -26,7 +26,7 @@ RUN cd /workspace/benchmark && \
 RUN cd /workspace/benchmark && \
     . ${SETUP_SCRIPT} && \
     python utils/cuda_utils.py --install-torch-deps && \ 
-    python utils/cuda_utils.py --install-torch-nightly --force-date 20250226
+    python utils/cuda_utils.py --install-torch-nightly
 
 # Check the installed version of nightly if needed
 
@@ -36,9 +36,9 @@ RUN cd /workspace/benchmark && \
     python utils/cuda_utils.py --install-torchbench-deps
 
 # Install TorchAO benchmark
-RUN cd /workspace/benchmark && \
-    . ${SETUP_SCRIPT} && \
-    python install.py --userbenchmark torchao
+# RUN cd /workspace/benchmark && \
+#     . ${SETUP_SCRIPT} && \
+#     python install.py --userbenchmark torchao
 
 # Install Torchbench models
 RUN cd /workspace/benchmark && \
