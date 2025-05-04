@@ -108,15 +108,15 @@ if __name__ == "__main__":
     if not success:
         print("Failed to install torchbenchmark requirements:")
         print(errmsg)
-        if not args.continue_on_fail:
-            sys.exit(-1)
+        print("Continuing despite requirements installation failures...")
+
     from torchbenchmark import setup
 
     success &= setup(
         models=args.models,
         skip_models=args.skip,
         verbose=args.verbose,
-        continue_on_fail=args.continue_on_fail,
+        continue_on_fail=True,
         test_mode=args.test_mode,
         allow_canary=args.canary,
     )
