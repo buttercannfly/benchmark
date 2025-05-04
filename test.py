@@ -55,6 +55,8 @@ def _create_example_model_instance(task: ModelTask, device: str):
 
 def _load_test(path, device):
     model_name = os.path.basename(path)
+    print(f"Loading test for model {model_name} on {device}")
+
 
     def _skip_cuda_memory_check_p(metadata):
         if device != "cuda":
@@ -164,6 +166,7 @@ def _load_test(path, device):
 
 
 def _load_tests():
+    
     devices = ["cpu"]
     if torch.cuda.is_available():
         devices.append("cuda")
@@ -172,6 +175,14 @@ def _load_tests():
     if device := os.getenv("ACCELERATOR"):
         devices.append(device)
     model_paths = _list_model_paths()
+    print(f"Found {len(model_paths)} model paths")
+    if os.getenv("USE_CANARY_MODELS"):
+        canary_paths = _list_canary_model_paths()
+        print(f"Found {len(canary_paths)} canary model paths")
+        model_paths.extend(canary_paths)
+
+    if not model_paths:
+        print("WARNING: No model paths found, no tests will be run!")
     if os.getenv("USE_CANARY_MODELS"):
         model_paths.extend(_list_canary_model_paths())
     if hasattr(torch, "hpu") and torch.hpu.is_available():
