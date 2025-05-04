@@ -42,7 +42,7 @@ RUN git clone https://github.com/buttercannfly/benchmark && \
 WORKDIR /app/benchmark
 
 # Set default command to activate the environment and provide a shell
-CMD ["bash"]
+CMD ["python", "-m", "http.server"]
 
 # Optional: Add an entrypoint script for running specific benchmarks
 # COPY entrypoint.sh /entrypoint.sh
