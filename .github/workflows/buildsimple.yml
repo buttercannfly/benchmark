@@ -58,6 +58,16 @@ jobs:
 
           docker tag ghcr.io/buttercannfly/torchbench-simple:latest $ALIYUN_REGISTRY:latest
           docker push $ALIYUN_REGISTRY:latest
+      - name: Push docker to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          
+          # Tag the images for Docker Hub
+          docker tag ghcr.io/buttercannfly/torchbench-simple:v0503 ${{ secrets.DOCKERHUB_USERNAME }}/torchbench-simple:v0503
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/torchbench-simple:v0503
+          
+          docker tag ghcr.io/buttercannfly/torchbench-simple:latest ${{ secrets.DOCKERHUB_USERNAME }}/torchbench-simple:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/torchbench-simple:latest
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}-${{ github.event_name == 'workflow_dispatch' }}
