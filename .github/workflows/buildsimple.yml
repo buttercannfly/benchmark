@@ -51,7 +51,7 @@ jobs:
           echo "${{ secrets.ALIYUN_DOCKER_PASSWORD }}" | docker login --username=15205648876 crpi-wpzfqfci37r0ad3n.cn-hangzhou.personal.cr.aliyuncs.com --password-stdin
 
           buttercannfly_VERSION=$(docker run -e SETUP_SCRIPT="${SETUP_SCRIPT}" ghcr.io/buttercannfly/torchbench-simple:latest bash -c '. "${SETUP_SCRIPT}"; python -c "import torch; print(torch.__version__)"')
-          export DOCKER_TAG=$(date +%Y%m%d)
+          export DOCKER_TAG="v$(date +%Y%m%d)"
 
           ALIYUN_REGISTRY=crpi-wpzfqfci37r0ad3n.cn-hangzhou.personal.cr.aliyuncs.com/tensorfusionrobin/tensorfusionrobin
 
@@ -65,6 +65,7 @@ jobs:
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
           
           # Tag the images for Docker Hub
+          export DOCKER_TAG="v$(date +%Y%m%d)"
           docker tag ghcr.io/buttercannfly/torchbench-simple:${DOCKER_TAG} ${{ secrets.DOCKERHUB_USERNAME }}/torchbench-simple:${DOCKER_TAG}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/torchbench-simple:${DOCKER_TAG}
           
