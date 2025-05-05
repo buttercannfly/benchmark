@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     ca-certificates \
     build-essential \
+    libjpeg-dev \ 
+    libpng-dev \
     cmake \
     && rm -rf /var/lib/apt/lists/*
 
