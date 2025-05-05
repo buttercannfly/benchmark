@@ -43,18 +43,20 @@ jobs:
               -f torchbench-simple.dockerfile -t ghcr.io/buttercannfly/torchbench-simple:latest
           # Extract buttercannfly version from the docker
           buttercannfly_VERSION=$(docker run -e SETUP_SCRIPT="${SETUP_SCRIPT}" ghcr.io/buttercannfly/torchbench-simple:latest bash -c '. "${SETUP_SCRIPT}"; python -c "import torch; print(torch.__version__)"')
-          docker tag ghcr.io/buttercannfly/torchbench-simple:latest ghcr.io/buttercannfly/torchbench-simple:v0503
+          # Generate date-based tag in format vYYYYMMDD
+          export DOCKER_TAG="v$(date +%Y%m%d)"
+          docker tag ghcr.io/buttercannfly/torchbench-simple:latest ghcr.io/buttercannfly/torchbench-simple:${DOCKER_TAG}
       - name: Push docker to Alibaba Cloud
         run: |
           echo "${{ secrets.ALIYUN_DOCKER_PASSWORD }}" | docker login --username=15205648876 crpi-wpzfqfci37r0ad3n.cn-hangzhou.personal.cr.aliyuncs.com --password-stdin
 
           buttercannfly_VERSION=$(docker run -e SETUP_SCRIPT="${SETUP_SCRIPT}" ghcr.io/buttercannfly/torchbench-simple:latest bash -c '. "${SETUP_SCRIPT}"; python -c "import torch; print(torch.__version__)"')
-          export DOCKER_TAG=$(awk '{match($0, /dev[0-9]+/, arr); print arr[0]}' <<< "${buttercannfly_VERSION}")
+          export DOCKER_TAG=$(date +%Y%m%d)
 
           ALIYUN_REGISTRY=crpi-wpzfqfci37r0ad3n.cn-hangzhou.personal.cr.aliyuncs.com/tensorfusionrobin/tensorfusionrobin
 
-          docker tag ghcr.io/buttercannfly/torchbench-simple:v0503 $ALIYUN_REGISTRY:v0503
-          docker push $ALIYUN_REGISTRY:v0503
+          docker tag ghcr.io/buttercannfly/torchbench-simple:${DOCKER_TAG} $ALIYUN_REGISTRY:${DOCKER_TAG}
+          docker push $ALIYUN_REGISTRY:${DOCKER_TAG}
 
           docker tag ghcr.io/buttercannfly/torchbench-simple:latest $ALIYUN_REGISTRY:latest
           docker push $ALIYUN_REGISTRY:latest
@@ -63,8 +65,8 @@ jobs:
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
           
           # Tag the images for Docker Hub
-          docker tag ghcr.io/buttercannfly/torchbench-simple:v0503 ${{ secrets.DOCKERHUB_USERNAME }}/torchbench-simple:v0503
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/torchbench-simple:v0503
+          docker tag ghcr.io/buttercannfly/torchbench-simple:${DOCKER_TAG} ${{ secrets.DOCKERHUB_USERNAME }}/torchbench-simple:${DOCKER_TAG}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/torchbench-simple:${DOCKER_TAG}
           
           docker tag ghcr.io/buttercannfly/torchbench-simple:latest ${{ secrets.DOCKERHUB_USERNAME }}/torchbench-simple:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/torchbench-simple:latest
