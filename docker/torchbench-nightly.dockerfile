@@ -7,6 +7,12 @@ ENV SETUP_SCRIPT=/workspace/setup_instance.sh
 ARG TORCHBENCH_BRANCH=${TORCHBENCH_BRANCH:-main}
 ARG FORCE_DATE=${FORCE_DATE}
 
+# Install necessary libraries for torchvision
+RUN apt-get update && apt-get install -y \
+    libjpeg-dev \
+    libpng-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Checkout Torchbench and submodules
 RUN git clone --recurse-submodules -b "${TORCHBENCH_BRANCH}" --single-branch \
