@@ -122,7 +122,9 @@ def _load_test(path, device):
                 task.make_model_instance(
                     test="eval", device=device, batch_size=batch_size
                 )
-                task.invoke()
+                # 添加循环来运行多次推理
+                for _ in range(300):  # 运行300次
+                    task.invoke()
                 task.check_details_eval(device=device, md=metadata)
                 task.check_eval_output()
                 task.del_model_instance()
