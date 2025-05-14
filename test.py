@@ -8,6 +8,8 @@ Make sure to enable an https proxy if necessary, or the setup steps may hang.
 import gc
 import os
 import unittest
+import argparse
+import sys
 
 import torch
 from torchbenchmark import (
@@ -26,6 +28,15 @@ from torchbenchmark.util.metadata_utils import skip_by_metadata
 # unresponsive for 5 minutes the parent will presume it dead / incapacitated.)
 TIMEOUT = int(os.getenv("TIMEOUT", 300))  # Seconds
 
+# Add argument parser
+parser = argparse.ArgumentParser(description='Run benchmark tests', add_help=False)
+parser.add_argument('-t', '--iterations', type=int, default=300,
+                    help='Number of iterations to run inference (default: 300)')
+# Parse only known arguments to avoid interfering with unittest
+args, unknown = parser.parse_known_args()
+
+# Store iterations in a global variable
+ITERATIONS = args.iterations
 
 class TestBenchmark(unittest.TestCase):
     def setUp(self):
@@ -122,8 +133,8 @@ def _load_test(path, device):
                 task.make_model_instance(
                     test="eval", device=device, batch_size=batch_size
                 )
-                # 添加循环来运行多次推理
-                for _ in range(300):  # 运行300次
+                # Run inference for specified number of iterations
+                for _ in range(ITERATIONS):
                     task.invoke()
                 task.check_details_eval(device=device, md=metadata)
                 task.check_eval_output()
@@ -200,4 +211,6 @@ def _load_tests():
 
 _load_tests()
 if __name__ == "__main__":
+    # Pass unknown arguments to unittest
+    sys.argv[1:] = unknown
     unittest.main()
