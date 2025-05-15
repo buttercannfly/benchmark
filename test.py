@@ -10,6 +10,7 @@ import os
 import unittest
 import argparse
 import sys
+import time  # Add time module import
 
 import torch
 from torchbenchmark import (
@@ -130,15 +131,33 @@ def _load_test(path, device):
             skip=_skip_cuda_memory_check_p(metadata), assert_equal=self.assertEqual
         ):
             try:
+                # Measure model initialization time
+                init_start_time = time.time()
                 task.make_model_instance(
                     test="eval", device=device, batch_size=batch_size
                 )
+                init_time = time.time() - init_start_time
+                print(f"\nModel initialization time: {init_time:.2f} seconds")
+
+                # Measure evaluation time
+                eval_start_time = time.time()
                 # Run inference for specified number of iterations
                 for _ in range(ITERATIONS):
                     task.invoke()
-                task.check_details_eval(device=device, md=metadata)
-                task.check_eval_output()
+                    task.check_details_eval(device=device, md=metadata)
+                    task.check_eval_output()
+                eval_time = time.time() - eval_start_time
+                print(f"Evaluation time: {eval_time:.2f} seconds")
+
+                # Measure cleanup time
+                cleanup_start_time = time.time()
                 task.del_model_instance()
+                cleanup_time = time.time() - cleanup_start_time
+                print(f"Cleanup time: {cleanup_time:.2f} seconds")
+
+                # Print total time
+                total_time = init_time + eval_time + cleanup_time
+                print(f"Total time: {total_time:.2f} seconds")
             except NotImplementedError as e:
                 self.skipTest(
                     f'Method eval on {device} is not implemented because "{e}", skipping...'
