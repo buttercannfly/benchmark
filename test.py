@@ -11,6 +11,7 @@ import unittest
 import argparse
 import sys
 import time  # Add time module import
+import concurrent.futures  # Add concurrent.futures import
 
 import torch
 from torchbenchmark import (
@@ -141,11 +142,20 @@ def _load_test(path, device):
 
                 # Measure evaluation time
                 eval_start_time = time.time()
-                # Run inference for specified number of iterations
-                for _ in range(ITERATIONS):
+
+                # Define a function to execute a single iteration
+                def run_iteration():
                     task.invoke()
                     task.check_details_eval(device=device, md=metadata)
                     task.check_eval_output()
+                
+                # Use ThreadPoolExecutor for parallel execution
+                with concurrent.futures.ThreadPoolExecutor() as executor:
+                    # Submit all iterations to the executor
+                    futures = [executor.submit(run_iteration) for _ in range(ITERATIONS)]
+                    # Wait for all iterations to complete
+                    concurrent.futures.wait(futures)
+                
                 eval_time = time.time() - eval_start_time
                 print(f"Evaluation time: {eval_time:.2f} seconds")
 
