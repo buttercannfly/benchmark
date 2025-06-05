@@ -145,19 +145,25 @@ def _load_test(path, device):
 
                 # Define a function to execute a single iteration
                 def run_iteration():
+                    # Only measure invoke time
+                    invoke_start = time.time()
                     task.invoke()
+                    invoke_time = time.time() - invoke_start
+                    
+                    # Run checks after timing
                     task.check_details_eval(device=device, md=metadata)
                     task.check_eval_output()
+                    return invoke_time
                 
                 # Use ThreadPoolExecutor for parallel execution
                 with concurrent.futures.ThreadPoolExecutor() as executor:
                     # Submit all iterations to the executor
                     futures = [executor.submit(run_iteration) for _ in range(ITERATIONS)]
-                    # Wait for all iterations to complete
-                    concurrent.futures.wait(futures)
+                    # Wait for all iterations to complete and sum up invoke times
+                    invoke_times = [future.result() for future in concurrent.futures.wait(futures)[0]]
+                    eval_time = sum(invoke_times)
                 
-                eval_time = time.time() - eval_start_time
-                print(f"Evaluation time: {eval_time:.2f} seconds")
+                print(f"Evaluation time (invoke only): {eval_time:.2f} seconds")
 
                 # Measure cleanup time
                 cleanup_start_time = time.time()
